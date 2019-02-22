@@ -1,29 +1,14 @@
-# vue_project
+# Vue Project with eCharts and Bootstrap 4
 
-## Project setup
+## 1. Project setup
 ```
 npm install
 ```
+## 2. Launch & Click On A Well ID To View Graph
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+![alt text](https://i.imgur.com/SCFkP3s.png)
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## 3. View Graph
 
-### Run your tests
-```
-npm run test
-```
+![alt text](https://i.imgur.com/MWUYDeF.png)
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
