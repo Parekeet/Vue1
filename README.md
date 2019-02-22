@@ -1,4 +1,4 @@
-# Ruths.ai Code Challenge
+# Vue Project with eCharts and Bootstrap 4
 
 ## 1. Project setup
 ```
