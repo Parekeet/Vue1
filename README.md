@@ -1,4 +1,4 @@
-# vue_project
+# Ruths.ai Code Challenge
 
 ## 1. Project setup
 ```
