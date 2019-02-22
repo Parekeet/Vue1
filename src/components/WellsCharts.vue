@@ -1,108 +1,143 @@
 
  <template> 
-    <div > 
-        <IEcharts :option="line" :loading="loading" id="chart"></IEcharts>
+    <div class="container-fluid text-center"> 
+
+         <div class="row d-flex justify-content-around mt-4" id="vue">
+             <button type="button" class="col-3 btn btn-primary btn-border" id="100041807911W600" v-on:click="select($event)">100041807911W600</button>
+             <button type="button" class="col-3 btn btn-primary btn-border" id="100042407712W600" v-on:click="select($event)">100042407712W600</button>
+             <button type="button" class="col-3 btn btn-primary btn-border" id="100042007811W600" v-on:click="select($event)">100042007811W600</button>
+         </div>
+
+        <div class="container mt-4">
+            <div id="chart" style="width: 100%; height: 700px"></div>
+        </div>
+ 
     </div>
 </template> 
 
 
+<style>
+ * {
+     background-color: darkgrey;
+     color: #508ff4;
+ }
+
+ .btn-border {
+     border: solid white 3px;
+     border-radius: 25px;
+     background-color: #508ff4;
+     color: white;
+ }
+
+    .pointer {
+        cursor: pointer;
+    } 
 
 
-<script> 
-    // export default {
-    //     name: 'WellsCharts',
-    //     props: [ "wellData" ] 
-    // }
+</style>
 
-// <template>
-//     <div>
-//         <div v-bind:key="well.wellId" v-for="well in wellData">
-//             <h1>Hi, fuckshit, here's the well ID: {{ well.wellId }}</h1>
-//             <h1>Hi, shit head, here's the oil rate: {{ well.oilRate.value }}</h1>
-//             <h1>Hi, fuck head, here's the gas rate: {{ well.gasRate.value }}</h1>
-//             <br>  
-//         </div>   
-//     </div>
-// </template>
- 
-
-</script>
  
 
 <script>
-
+import Vue from 'vue' 
 import IEcharts from 'vue-echarts-v3' 
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/chart/line' 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
- 
+import WellJson from '/Users/chavinv/Desktop/vue_project/src/wellResponse.json'
+// import WellJson from '/Users/chavinv/Desktop/vue_project/src/wellResponse.json'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line'   
+import * as echarts from 'echarts' 
 
-getWellData ()
-
-export default {
 
 
 
-    name: 'WellsCharts',
-    props: [ "wellData" ], 
-    data (props) {
-
-        var wellData = props._props.wellData; 
-
-        var wellId = [];
+function drawChart (targetId) {
+        var wellData = WellJson.data;  
+        var filteredById = wellData.filter(wellData => wellData.wellId === targetId); 
         var gasRate = [];
         var oilRate = [];
         var prodDate = [];
-
-        wellData.map(function(obj){
-            wellId.push(obj.wellId);
+ 
+        filteredById.map(function(obj){  
             gasRate.push(obj.gasRate.value);
             oilRate.push(obj.oilRate.value); 
-            prodDate.push(obj.prodDate); 
+            prodDate.push(obj.prodDate);  
         })
 
-        console.log(wellId);
-        console.log(gasRate);
-        console.log(oilRate);
-        console.log(prodDate);
+        var gasMax = gasRate.reduce(function(a, b) {
+            return Math.max(a, b);
+        });
+ 
+        var oilMax = oilRate.reduce(function(a, b) {
+            return Math.max(a, b);
+        });
 
-        return {
-            loading: false,
-            line: {
-                title: {
-                    text: 'ECharts'
-                },
-                tooltip: {},
-                xAxis: {
-                    data: prodDate
-                    // data: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN']
-                },
-                yAxis: {},
-                series: [{
-                    name: 'Bleep Bloop Blap',
+        var max = oilMax > gasMax ? oilMax : gasMax;
+ 
+   		var chart = document.getElementById('chart');
+        var myChart = echarts.init(chart);
+        var option = {
+            title: {
+                text: "Well ID: " + targetId,
+                textstyle: {
+                    color: 'white'
+                }
+            },
+            tooltip: {
+                formatter: '{a0}: {c0} <br /> {d0}'
+            },
+            xAxis: { 
+                data: prodDate,
+                // axisLabel: {
+                //     color: 'black'
+                // }
+                axisLabel: {
+                    formatter: function (prodDate, index) {
+                        // Formatted to be month/day; display year only in the first label
+                        var date = new Date(prodDate);
+                        var texts = [(date.getMonth() + 1), date.getDate(), date.getFullYear()];
+                        // if (prodDate === 0) {
+                        //     texts.unshift(date.getYear());
+                        // }
+                        return texts.join('/');
+                    }
+                } 
+            },
+            yAxis: {
+                type: 'value',
+                min: 0,
+                max: max,
+                axisLabel: {
+                    color: 'black'
+                }
+            },
+            series: [
+                {
+                    name: 'Oil Rate',
                     type: 'line', 
                     data: oilRate
-                    // data: [5, 20, 36, 10, 10, 20]
-                }]
-            }
-        }
-        },
-        components: {
-            IEcharts
-        },
-}
+                },
+                {
+                    name: 'Gas Rate',
+                    type: 'line', 
+                    data: gasRate
+                }
+            ]
+        };
+        myChart.setOption(option);
 
-
-function getWellData () {
-    console.log("SUP this is getwell data")
-    axios.get('/wellResponse.json')
-    .then((response) => {
-        console.log(response.data)
-    })
-    .catch((err) => {
-        console.log(err);
-    })
 }
  
+export default { 
+    name: 'WellsCharts',
+    methods: {
+        select: function(event) {
+            var targetId = event.currentTarget.id; 
+            drawChart(targetId);
+        }
+    }
+} 
+        
+
 </script>
