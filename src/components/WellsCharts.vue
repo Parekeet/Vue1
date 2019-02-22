@@ -90,7 +90,7 @@ function drawChart (targetId) {
                 }
             },
             tooltip: {
-                formatter: '{a0}: {c0} <br /> {d0}'
+                formatter: '{a0}: {c0}'
             },
             xAxis: { 
                 data: prodDate,
