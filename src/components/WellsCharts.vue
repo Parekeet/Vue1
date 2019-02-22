@@ -2,6 +2,8 @@
  <template> 
     <div class="container-fluid text-center"> 
 
+        <img src="../assets/unnamed.png"  class="d-inline" alt="Ruths Logo" >  
+
          <div class="row d-flex justify-content-around mt-4" id="vue">
              <button type="button" class="col-3 btn btn-primary btn-border" id="100041807911W600" v-on:click="select($event)">100041807911W600</button>
              <button type="button" class="col-3 btn btn-primary btn-border" id="100042407712W600" v-on:click="select($event)">100042407712W600</button>
@@ -18,14 +20,14 @@
 
 <style>
  * {
-     background-color: darkgrey;
-     color: #508ff4;
+     background-color: #E3E3E3;
+     color: #3A3A3C;
  }
 
  .btn-border {
      border: solid white 3px;
      border-radius: 25px;
-     background-color: #508ff4;
+     background-color: #79AECA;
      color: white;
  }
 
@@ -33,6 +35,10 @@
         cursor: pointer;
     } 
 
+.title-padding {
+    height: 67px;
+    font-size: 3rem;
+}
 
 </style>
 
@@ -43,8 +49,7 @@ import Vue from 'vue'
 import IEcharts from 'vue-echarts-v3' 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import WellJson from '/Users/chavinv/Desktop/vue_project/src/wellResponse.json'
-// import WellJson from '/Users/chavinv/Desktop/vue_project/src/wellResponse.json'
+import WellJson from '../wellResponse.json' 
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/chart/line'   
 import * as echarts from 'echarts' 
